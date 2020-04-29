@@ -1,8 +1,17 @@
 #include "window.hpp"
 #include "gun.hpp"
-
+#include "bulletmanager.hpp"
 
 int main(int argc, char** args) {
+    // Testing
+    {
+        BulletManager manager;
+        manager.Fire(10, 15, 20, 27, 30, 40, 10);
+        BulletManager manager2(std::move(manager));
+        manager.show();
+        manager2.show();
+    }
+  
     Window& window = Window::getInstance();
     Gun gun("ufo.bmp");
     SDL_Event e;
