@@ -1,5 +1,6 @@
 #include "gun.hpp"
 #include "window.hpp"
+#include <iostream>
 
 Gun::Gun(std::string s) {
     static Window& window = Window::getInstance();
@@ -10,7 +11,9 @@ Gun::Gun(std::string s) {
     SDL_FreeSurface(temp_surface);
     // Place gun in the middle of bottom part of screen
     gun_x_ = window.get_width()/2 - gun_width_/2;
-    gun_y_ = window.get_height() - gun_height_;;
+    gun_y_ = window.get_height() - gun_height_;
+
+    start_time_ = std::chrono::system_clock::now();
 }
 
 Gun::~Gun() {
@@ -68,8 +71,16 @@ void Gun::handle_keyboard_input() {
     }
 }
 
+void Gun::handle_mouse_input(SDL_Event& e) {
+    if(e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT) {
+        int x, y;
+        SDL_GetMouseState(&x, &y);
+        manager_.Fire(gun_x_ + gun_width_/2, gun_y_ + gun_height_/2, x, y, 100, current_duration(), 20);
+    }
+}
+
 // Updates gun location according to vertical & horizontal speed
-void Gun::move() {
+void Gun::move_gun() {
     static Window& window = Window::getInstance();
     gun_x_ += gun_speed_x_;
     gun_y_ += gun_speed_y_;
@@ -81,5 +92,15 @@ void Gun::move() {
     if(gun_y_ <  window.get_height() * 3.0 / 4  || gun_y_ + gun_height_ > window.get_height()) {
         gun_y_ -= gun_speed_y_;
     }
+}
+
+void Gun::move_bullets() {
+    manager_.Update(current_duration());
+}
+
+float Gun::current_duration() {
+    auto current_time = std::chrono::system_clock::now();
+    float duration = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - start_time_).count() / 1000.0;
+    return duration;
 }
 

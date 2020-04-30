@@ -41,22 +41,23 @@ BulletManager::~BulletManager() {
 
 // Calculate bullet location at given time
 void BulletManager::Update(float time) {
-    std::cout << "BulletManager Update";
     const size_t BULLET_COUNT{bullets_.size()};
     for(size_t i{0}; i < BULLET_COUNT; ++i) {
         Bullet& current_bullet = bullets_.at(i);
-        if(time < current_bullet.time_) {
-            continue;
-        } 
-        else if(time > current_bullet.time_ && time < current_bullet.time_ + current_bullet.life_time_) {
-            const float DURATION{time - current_bullet.time_};
-            float pos_x = current_bullet.src_x_ + current_bullet.speed_x_ * DURATION;
-            float pos_y = current_bullet.src_y_ + current_bullet.speed_y_ * DURATION;
-        } else {
-            continue;
+        auto position = current_bullet.calculate_position(time);
+        switch(position.status) {
+            case BULLET_NOT_YET_FLYING : {
+                break;
+            }
+            case BULLET_IS_FLYING : {
+                current_bullet.draw(position.x, position.y);
+                break;
+            }
+            case BULLET_EXPIRED : {
+                break;
+            }
         }
     }
-
 }
 
 // Add new bullet
