@@ -25,7 +25,8 @@ public:
     void fill(size_t n);
     // Show internal bullets
     void show();
-
 private:
     std::vector<Bullet> bullets_;
+
+
 };

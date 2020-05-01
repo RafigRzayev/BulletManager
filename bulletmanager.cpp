@@ -1,6 +1,8 @@
 #include "bulletmanager.hpp"
 #include <iostream>
 #include <cmath>
+#include "wall.hpp"
+#include "generate_walls.hpp"
 
 // Default Constructor
 BulletManager::BulletManager() {
@@ -41,6 +43,7 @@ BulletManager::~BulletManager() {
 
 // Calculate bullet location at given time
 void BulletManager::Update(float time) {
+    static std::vector<Wall> walls = generate_Walls(10);
     const size_t BULLET_COUNT{bullets_.size()};
     for(size_t i{0}; i < BULLET_COUNT; ++i) {
         Bullet& current_bullet = bullets_.at(i);
@@ -51,12 +54,24 @@ void BulletManager::Update(float time) {
             }
             case BULLET_IS_FLYING : {
                 current_bullet.draw(position.x, position.y);
+                auto it = walls.begin();
+                while(it != walls.end()) {
+                    if(it->collision_detected(position.x, position.y)) {
+                        it = walls.erase(it);
+                    } else {
+                        ++it;
+                    }
+
+                }
                 break;
             }
             case BULLET_EXPIRED : {
                 break;
             }
         }
+    }
+    for(size_t i{0}; i < walls.size(); ++i) {
+        walls.at(i).draw();
     }
 }
 
