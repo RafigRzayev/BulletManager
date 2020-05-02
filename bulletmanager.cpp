@@ -3,6 +3,7 @@
 #include <cmath>
 #include "wall.hpp"
 #include "generate_walls.hpp"
+#include "algorithm"
 
 // Default Constructor
 BulletManager::BulletManager() {
@@ -43,40 +44,46 @@ BulletManager::~BulletManager() {
 
 // Calculate bullet location at given time
 void BulletManager::Update(float time) {
-    static std::vector<Wall> walls = generate_Walls(70);
-    const size_t BULLET_COUNT{bullets_.size()};
-    for(size_t i{0}; i < BULLET_COUNT; ++i) {
-        Bullet& current_bullet = bullets_.at(i);
-        auto position = current_bullet.calculate_position(time);
+    static std::vector<Wall> walls = generate_Walls(10);
+    auto bullet_it = bullets_.begin();
+    while(bullet_it != bullets_.end()) {
+        auto position = bullet_it->calculate_position(time);
         switch(position.status) {
             case BULLET_NOT_YET_FLYING : {
+                ++bullet_it;
                 break;
             }
             case BULLET_IS_FLYING : {
-                current_bullet.draw(position.x, position.y);
-                auto it = walls.begin();
-                while(it != walls.end()) {
-                    if(it->collision_detected(position.x, position.y)) {
-                        auto collision_effect = it->change_dir(position.x, position.y);
-                        if(collision_effect == CHANGE_HORIZONTAL) {
-                            current_bullet.reverse_horizontal_speed(time, position.x, position.y);
-                        } else if (collision_effect == CHANGE_VERTICAL) {
-                            current_bullet.reverse_vertical_speed(time, position.x, position.y);
-                        } else {
-                            std::cout << "NO CHANGE MAAAAN!!!!!\n";
+                bullet_it->draw(position.x, position.y);
+                auto wall_it = walls.begin();
+                while(wall_it != walls.end()) {  
+                    switch(wall_it->collision_status(position.x, position.y)) {
+                        case NO_COLLISION : {
+                            ++wall_it;
+                            break;
                         }
-                        it = walls.erase(it);
-                    } else {
-                        ++it;
+                        case HORIZONTAL_REFLECTION: {
+                            bullet_it->reverse_horizontal_speed(time, position.x, position.y);
+                            wall_it = walls.erase(wall_it);
+                            break;
+                        }
+                        case VERTICAL_REFLECTION: {
+                            bullet_it->reverse_vertical_speed(time, position.x, position.y);
+                            wall_it = walls.erase(wall_it);
+                            break;
+                        }
                     }
                 }
+                ++bullet_it;
                 break;
             }
             case BULLET_EXPIRED : {
+                bullet_it = bullets_.erase(bullet_it);
                 break;
             }
         }
     }
+
     for(size_t i{0}; i < walls.size(); ++i) {
         walls.at(i).draw();
     }
@@ -88,23 +95,3 @@ void BulletManager::Fire(float src_x, float src_y, float dst_x, float dst_y, flo
     bullets_.emplace_back(src_x, src_y, dst_x, dst_y, speed, time, life_time);
 }
 
-// Add n bullets
-void BulletManager::fill(size_t n) {
-    bullets_.reserve(n);
-    for(size_t i{0}; i < n; ++i) {
-        Fire(0, 1, 2, 3, 4, 5, 6);
-    }
-}
-
-// Show internal bullets
-void BulletManager::show() {
-    const size_t BULLET_COUNT{bullets_.size()};
-    if(BULLET_COUNT == 0) {
-        std::cout << "Empty\n";
-    } else {
-        for(size_t i{0}; i < BULLET_COUNT; ++i) {
-            bullets_.at(i).info();
-        }
-    }
-
-}

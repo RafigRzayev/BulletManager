@@ -21,10 +21,6 @@ public:
     void Update(float time);
     // Add new bullet
     void Fire(float src_x, float src_y, float dst_x, float dst_y, float speed, float time, float life_time);
-    // Add n bullets
-    void fill(size_t n);
-    // Show internal bullets
-    void show();
 private:
     std::vector<Bullet> bullets_;
 

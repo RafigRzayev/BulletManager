@@ -79,25 +79,26 @@ bool Wall::coincidies(int x, int y) {
     return (x >= x_ - WALL_WIDTH_ ) && (x <= x_ + WALL_WIDTH_) && (y >= y_ - WALL_HEIGHT_) && (y <= y_ + WALL_HEIGHT_);
 }
 
-bool Wall::collision_detected(float x, float y) {
-    return (x >= x_ - WALL_WIDTH_/2 ) && (x <= x_ + WALL_WIDTH_/2) && (y >= y_ - WALL_HEIGHT_/2) && (y <= y_ + WALL_HEIGHT_/2);
-}
-
-int Wall::change_dir(float x, float y) {
-    float X_LEFT = x_ - (WALL_WIDTH_ / 2.0);
-    float X_RIGHT = x_ + (WALL_WIDTH_ / 2.0);
-    float Y_TOP = y_ - (WALL_HEIGHT_ / 2.0);
-    float Y_BOT = y_ + (WALL_HEIGHT_ / 2.0);
-    Triangle TOP = {X_LEFT, Y_TOP, static_cast<float>(x_), static_cast<float>(y_), X_RIGHT, Y_TOP};
-    Triangle BOT = {X_LEFT, Y_BOT, static_cast<float>(x_), static_cast<float>(y_), X_RIGHT, Y_BOT};
-    Triangle LEFT = {X_LEFT, Y_TOP, static_cast<float>(x_), static_cast<float>(y_), X_LEFT, Y_BOT};
-    Triangle RIGHT = {X_RIGHT, Y_TOP, static_cast<float>(x_), static_cast<float>(y_), X_RIGHT, Y_BOT};
-    if(TOP.inside(x, y) || BOT.inside(x, y)) {
-        return CHANGE_VERTICAL;
-    } else if (LEFT.inside(x, y) || RIGHT.inside(x, y)) {
-        return CHANGE_HORIZONTAL;
-    }
-    else {
+int Wall::collision_status(float x, float y) {
+    // Borders of the wall
+    float LEFT_BORDER_X = x_ - (WALL_WIDTH_ / 2.0);
+    float RIGHT_BORDER_X = x_ + (WALL_WIDTH_ / 2.0);
+    float TOP_BORDER_Y = y_ - (WALL_HEIGHT_ / 2.0);
+    float BOT_BORDER_Y = y_ + (WALL_HEIGHT_ / 2.0);
+    // Check if there is collision (origin of SDL coordinate system is top-left corner of window)
+    if( x >= LEFT_BORDER_X && x <= RIGHT_BORDER_X && y >= TOP_BORDER_Y && y <= BOT_BORDER_Y) {
+        // This part calculates direction of reflection 
+        // Divide wall into 4 triangles. Check in which triangle is bullet.
+        // If it is inside top or bottom triangle, vertical speed will be reversed, and horizontal speed won't change.
+        // Similarly, if it falls inside left/right triangle, then only horizontal speed will change direction.
+        Triangle TOP_TRIANGLE = {LEFT_BORDER_X, TOP_BORDER_Y, static_cast<float>(x_), static_cast<float>(y_), RIGHT_BORDER_X, TOP_BORDER_Y};
+        Triangle BOT_TRIANGLE = {LEFT_BORDER_X, BOT_BORDER_Y, static_cast<float>(x_), static_cast<float>(y_), RIGHT_BORDER_X, BOT_BORDER_Y};
+        if(TOP_TRIANGLE.covers(x, y) || BOT_TRIANGLE.covers(x, y)) {
+            return VERTICAL_REFLECTION;
+        } else {
+            return HORIZONTAL_REFLECTION;
+        }       
+    } else {
         return NO_COLLISION;
     }
 }
