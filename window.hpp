@@ -12,12 +12,11 @@ public:
     }
     ~Window();
     void clear();
-    void draw(Gun&);
     void display();
     SDL_Renderer* get_renderer();
     size_t get_width() const;
     size_t get_height() const;
-    
+    bool check_quit(SDL_Event& e);    
 // Disable copy / move semantics
 Window(const Window&) = delete;
 Window(Window&&) = delete;

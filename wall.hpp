@@ -1,9 +1,7 @@
 #pragma once
 
-#include "SDL\include\SDL2\SDL.h"
-#include <string>
 #include <cmath>
-#include <iostream>
+#include "image.hpp"
 
 struct Triangle {
     float x1_;
@@ -55,16 +53,9 @@ public:
     bool coincidies(int x, int y);
     // checks if point is inside the wall;
     int collision_status(float x, float y);
-
-
-    static SDL_Texture* WALL_TEXTURE_;
-    static const int WALL_WIDTH_;
-    static const int WALL_HEIGHT_;
+    static Image wall_image_;
 private:
     int x_{0};
     int y_{0};
 
-    static SDL_Texture* load_texture(std::string s);
-    static int load_width(std::string s);
-    static int load_height(std::string s);
 };

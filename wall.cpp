@@ -1,27 +1,7 @@
 #include "wall.hpp"
-#include <memory>
 #include <iostream>
-#include "window.hpp"
 
-
-SDL_Texture* Wall::load_texture(std::string s) {
-    std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)>temp_surface(SDL_LoadBMP(s.c_str()), &SDL_FreeSurface);
-    return SDL_CreateTextureFromSurface(Window::getInstance().get_renderer(), temp_surface.get());
-}
-
-int Wall::load_width(std::string s) {
-    std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)>temp_surface(SDL_LoadBMP(s.c_str()), &SDL_FreeSurface);
-    return temp_surface->w; 
-}
-
-int Wall::load_height(std::string s) {
-    std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)>temp_surface(SDL_LoadBMP(s.c_str()), &SDL_FreeSurface);
-    return temp_surface->h; 
-}
-
-SDL_Texture* Wall::WALL_TEXTURE_{load_texture("wall.bmp")};
-const int Wall::WALL_WIDTH_{load_width("wall.bmp")};
-const int Wall::WALL_HEIGHT_{load_height("wall.bmp")};
+Image Wall::wall_image_{"wall.bmp"};
 
 // Default Constructor
 Wall::Wall() { 
@@ -55,15 +35,12 @@ Wall::~Wall() {
 
 // Print Wall parameters to console
 void Wall::info() {
-    std::cout << "[ " << x_ << ", " << y_ << ", " << WALL_WIDTH_ << ", " << WALL_HEIGHT_ << " ]\n";
+    std::cout << "[ " << x_ << ", " << y_ << ", " << wall_image_.get_width() << ", " << wall_image_.get_height() << " ]\n";
 }
 
 // Draw Wall on the screen
 void Wall::draw() {
-    SDL_Rect rec = {
-        static_cast<int>(x_ - WALL_WIDTH_/2), static_cast<int>(y_ - WALL_HEIGHT_/2),
-        static_cast<int>(WALL_WIDTH_), static_cast<int>(WALL_HEIGHT_) };
-    SDL_RenderCopy(Window::getInstance().get_renderer(), WALL_TEXTURE_, NULL, &rec);    
+    wall_image_.draw(x_, y_);    
 }
 
 
@@ -76,15 +53,15 @@ int Wall::get_y() {
 }
 
 bool Wall::coincidies(int x, int y) {
-    return (x >= x_ - WALL_WIDTH_ ) && (x <= x_ + WALL_WIDTH_) && (y >= y_ - WALL_HEIGHT_) && (y <= y_ + WALL_HEIGHT_);
+    return (x >= x_ - wall_image_.get_width() ) && (x <= x_ + wall_image_.get_width()) && (y >= y_ - wall_image_.get_height()) && (y <= y_ + wall_image_.get_height());
 }
 
 int Wall::collision_status(float x, float y) {
     // Borders of the wall
-    float LEFT_BORDER_X = x_ - (WALL_WIDTH_ / 2.0);
-    float RIGHT_BORDER_X = x_ + (WALL_WIDTH_ / 2.0);
-    float TOP_BORDER_Y = y_ - (WALL_HEIGHT_ / 2.0);
-    float BOT_BORDER_Y = y_ + (WALL_HEIGHT_ / 2.0);
+    float LEFT_BORDER_X = x_ - (wall_image_.get_width() / 2.0);
+    float RIGHT_BORDER_X = x_ + (wall_image_.get_width() / 2.0);
+    float TOP_BORDER_Y = y_ - (wall_image_.get_height() / 2.0);
+    float BOT_BORDER_Y = y_ + (wall_image_.get_height() / 2.0);
     // Check if there is collision (origin of SDL coordinate system is top-left corner of window)
     if( x >= LEFT_BORDER_X && x <= RIGHT_BORDER_X && y >= TOP_BORDER_Y && y <= BOT_BORDER_Y) {
         // This part calculates direction of reflection 

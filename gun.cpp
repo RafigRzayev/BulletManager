@@ -1,50 +1,22 @@
 #include "gun.hpp"
 #include "window.hpp"
-#include <iostream>
 
-Gun::Gun(std::string s) {
+Image Gun::gun_image_{"ufo.bmp"};
+
+Gun::Gun() {
     static Window& window = Window::getInstance();
-    SDL_Surface *temp_surface = SDL_LoadBMP(s.c_str());
-    gun_width_ = temp_surface->w;
-    gun_height_ = temp_surface->h;
-    gun_image_ = SDL_CreateTextureFromSurface(window.get_renderer(), temp_surface);
-    SDL_FreeSurface(temp_surface);
-    // Place gun in the middle of bottom part of screen
-    gun_x_ = window.get_width()/2 - gun_width_/2;
-    gun_y_ = window.get_height() - gun_height_;
+    gun_x_ = window.get_width()/2;
+    gun_y_ = window.get_height() - gun_image_.get_height();
 
     start_time_ = std::chrono::system_clock::now();
 }
 
 Gun::~Gun() {
-    SDL_DestroyTexture(gun_image_);
 }
 
-SDL_Texture* Gun::get_texture() {
-    return gun_image_;
-}
-
-float Gun::get_x() const {
-    return gun_x_;
-}
-float Gun::get_y() const {
-    return gun_y_;
-}
-
-size_t Gun::get_width() const {
-    return gun_width_;
-}
-
-size_t Gun::get_height() const {
-    return gun_height_;
-}
-
-void Gun::set_x(size_t new_x) {
-    gun_x_ = new_x;
-}
-
-void Gun::set_y(size_t new_y) {
-    gun_y_ = new_y;
+void Gun::handle_user_input(SDL_Event& e) {
+    handle_keyboard_input();
+    handle_mouse_input(e);
 }
 
 void Gun::handle_keyboard_input() {
@@ -75,27 +47,29 @@ void Gun::handle_mouse_input(SDL_Event& e) {
     if(e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT) {
         int x, y;
         SDL_GetMouseState(&x, &y);
-        manager_.Fire(gun_x_ + gun_width_/2, gun_y_ + gun_height_/2, x, y, 100, current_duration(), 20);
+        manager_.Fire(gun_x_, gun_y_, x, y, 100, current_duration(), 20);
     }
 }
 
+void Gun::update_all() {
+    manager_.Update(current_duration());
+    Update();
+}
+
 // Updates gun location according to vertical & horizontal speed
-void Gun::move_gun() {
+void Gun::Update() {
     static Window& window = Window::getInstance();
     gun_x_ += gun_speed_x_;
     gun_y_ += gun_speed_y_;
     // Limit horizontal movement by window borders
-    if(gun_x_ < 0 || gun_x_ + gun_width_ > window.get_width()) {
+    if(gun_x_ - gun_image_.get_width()/2 < 0 || gun_x_ + gun_image_.get_width()/2 > window.get_width()) {
         gun_x_ -= gun_speed_x_;
     }
     // Limit vertical movement for bottom 25% of screen height 
-    if(gun_y_ <  window.get_height() * 3.0 / 4  || gun_y_ + gun_height_ > window.get_height()) {
+    if(gun_y_ - gun_image_.get_height()/2 <  window.get_height() * 3.0 / 4  || gun_y_ + gun_image_.get_height()/2 > window.get_height()) {
         gun_y_ -= gun_speed_y_;
     }
-}
-
-void Gun::move_bullets() {
-    manager_.Update(current_duration());
+    draw();
 }
 
 float Gun::current_duration() {
@@ -104,3 +78,6 @@ float Gun::current_duration() {
     return duration;
 }
 
+void Gun::draw() {
+    gun_image_.draw(gun_x_, gun_y_);
+}

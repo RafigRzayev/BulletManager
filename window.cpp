@@ -20,12 +20,6 @@ void Window::clear() {
     SDL_RenderClear(renderer_);
 }
 
-void Window::draw(Gun& IMG) {
-    SDL_Rect rec = {static_cast<int>(IMG.get_x()), static_cast<int>(IMG.get_y()),
-                    static_cast<int>(IMG.get_width()), static_cast<int>(IMG.get_height())};
-    SDL_RenderCopy(renderer_, IMG.get_texture(), NULL, &rec);
-}
-
 void Window::display() {
     SDL_RenderPresent(renderer_);
 }
@@ -40,4 +34,8 @@ size_t Window::get_width() const {
 
 size_t Window::get_height() const {
     return W_HEIGHT_;
+}
+
+bool Window::check_quit(SDL_Event& e) {
+    return e.type == SDL_QUIT;
 }

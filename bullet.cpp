@@ -1,26 +1,8 @@
 #include "bullet.hpp"
 #include <cmath>
-#include <memory>
-#include "window.hpp"
+#include <iostream>
 
-SDL_Texture* Bullet::load_texture(std::string s) {
-    std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)> temp_surface(SDL_LoadBMP(s.c_str()), &SDL_FreeSurface);
-    return SDL_CreateTextureFromSurface(Window::getInstance().get_renderer(), temp_surface.get());
-}
-
-size_t Bullet::load_texture_width(std::string s) {
-    std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)> temp_surface(SDL_LoadBMP(s.c_str()), &SDL_FreeSurface);
-    return temp_surface->w;    
-}
-
-size_t Bullet::load_texture_height(std::string s) {
-    std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)> temp_surface(SDL_LoadBMP(s.c_str()), &SDL_FreeSurface);
-    return temp_surface->h;    
-}
-
-SDL_Texture* Bullet::BULLET_TEXTURE_{load_texture("bullet.bmp")};
-const size_t Bullet::BULLET_WIDTH_{load_texture_width("bullet.bmp")};
-const size_t Bullet::BULLET_HEIGHT_{load_texture_height("bullet.bmp")};
+Image Bullet::bullet_image_{"bullet.bmp"};
 
 // Default Constructor
 Bullet::Bullet() {
@@ -59,11 +41,6 @@ Bullet::~Bullet() {
     std::cout << "Bullet Destructor\n";
 }
 
-// Print bullet parameters to console
-void Bullet::info() {
-    std::cout << "[" << src_x_ << ", " << src_y_ << ", " << speed_x_ << ", " << speed_y_ << ", " << time_ << ", " << life_time_ << "]\n"; 
-}
-
 // Calculate bullet position at time t
 Bullet_Position Bullet::calculate_position(float current_time) {
     if(current_time < time_) {
@@ -81,20 +58,17 @@ Bullet_Position Bullet::calculate_position(float current_time) {
 }
 
 void Bullet::draw(float x, float y) {
-    SDL_Rect rec = {
-        static_cast<int>(x - BULLET_WIDTH_/2), static_cast<int>(y - BULLET_HEIGHT_/2),
-        static_cast<int>(BULLET_WIDTH_), static_cast<int>(BULLET_HEIGHT_) };
-    SDL_RenderCopy(Window::getInstance().get_renderer(), BULLET_TEXTURE_, NULL, &rec);    
+    bullet_image_.draw(x, y);   
 }
 
-void Bullet::reverse_horizontal_speed(float t, float x, float y) {
+void Bullet::reflect_horizontally(float t, float x, float y) {
     src_x_ = x;
     src_y_ = y;
     time_ = t;
     speed_x_ = - speed_x_;
 }
 
-void Bullet::reverse_vertical_speed(float t, float x, float y) {
+void Bullet::reflect_vertically(float t, float x, float y) {
     src_x_ = x;
     src_y_ = y;
     time_ = t;

@@ -63,12 +63,12 @@ void BulletManager::Update(float time) {
                             break;
                         }
                         case HORIZONTAL_REFLECTION: {
-                            bullet_it->reverse_horizontal_speed(time, position.x, position.y);
+                            bullet_it->reflect_horizontally(time, position.x, position.y);
                             wall_it = walls.erase(wall_it);
                             break;
                         }
                         case VERTICAL_REFLECTION: {
-                            bullet_it->reverse_vertical_speed(time, position.x, position.y);
+                            bullet_it->reflect_vertically(time, position.x, position.y);
                             wall_it = walls.erase(wall_it);
                             break;
                         }
