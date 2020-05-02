@@ -87,6 +87,20 @@ void Bullet::draw(float x, float y) {
     SDL_RenderCopy(Window::getInstance().get_renderer(), BULLET_TEXTURE_, NULL, &rec);    
 }
 
+void Bullet::reverse_horizontal_speed(float t, float x, float y) {
+    src_x_ = x;
+    src_y_ = y;
+    time_ = t;
+    speed_x_ = - speed_x_;
+}
+
+void Bullet::reverse_vertical_speed(float t, float x, float y) {
+    src_x_ = x;
+    src_y_ = y;
+    time_ = t;
+    speed_y_ = - speed_y_;
+}
+
 // Calculate horizontal and vertical speed based on speed & destination/ source coordinates
 void Bullet::calculate_x_and_y_speed(float dst_x, float dst_y, float speed) {
     const float X_LENGTH = abs(dst_x - src_x_);

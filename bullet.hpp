@@ -33,6 +33,8 @@ public:
     Bullet_Position calculate_position(float t);
     // Draw Bullet on the screen
     void draw(float x, float y);
+    void reverse_horizontal_speed(float t, float x, float y);
+    void reverse_vertical_speed(float t, float x, float y);
 
 private:
     // Calculate horizontal and vertical speed based on speed & destination/ source coordinates

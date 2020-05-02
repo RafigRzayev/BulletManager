@@ -43,7 +43,7 @@ BulletManager::~BulletManager() {
 
 // Calculate bullet location at given time
 void BulletManager::Update(float time) {
-    static std::vector<Wall> walls = generate_Walls(10);
+    static std::vector<Wall> walls = generate_Walls(70);
     const size_t BULLET_COUNT{bullets_.size()};
     for(size_t i{0}; i < BULLET_COUNT; ++i) {
         Bullet& current_bullet = bullets_.at(i);
@@ -57,11 +57,18 @@ void BulletManager::Update(float time) {
                 auto it = walls.begin();
                 while(it != walls.end()) {
                     if(it->collision_detected(position.x, position.y)) {
+                        auto collision_effect = it->change_dir(position.x, position.y);
+                        if(collision_effect == CHANGE_HORIZONTAL) {
+                            current_bullet.reverse_horizontal_speed(time, position.x, position.y);
+                        } else if (collision_effect == CHANGE_VERTICAL) {
+                            current_bullet.reverse_vertical_speed(time, position.x, position.y);
+                        } else {
+                            std::cout << "NO CHANGE MAAAAN!!!!!\n";
+                        }
                         it = walls.erase(it);
                     } else {
                         ++it;
                     }
-
                 }
                 break;
             }
