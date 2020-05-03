@@ -3,15 +3,15 @@
 #include <random>
 #include "window.hpp"
 
-std::vector<Wall> generate_Walls(size_t N) {
+std::vector<Wall> generate_walls(size_t N) {
     std::vector<Wall> walls;
     walls.reserve(N);
 
     Window &window = Window::getInstance();
     const int SCREEN_WIDTH =window.get_width();
     const int SCREEN_HEIGHT =window.get_height();
-    const int WALL_WIDTH{ Wall::wall_image_.get_width()};
-    const int WALL_HEIGHT{ Wall::wall_image_.get_height()};
+    const int WALL_WIDTH{ Wall::get_width()};
+    const int WALL_HEIGHT{ Wall::get_height()};
 
     const int LEFT_LIMIT = WALL_WIDTH / 2.0 ;
     const int RIGHT_LIMIT = SCREEN_WIDTH - (WALL_WIDTH  / 2.0) ;

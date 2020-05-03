@@ -44,7 +44,7 @@ BulletManager::~BulletManager() {
 
 // Calculate bullet location at given time
 void BulletManager::Update(float time) {
-    static std::vector<Wall> walls = generate_Walls(10);
+    static std::vector<Wall> walls = generate_walls(90);
     auto bullet_it = bullets_.begin();
     while(bullet_it != bullets_.end()) {
         auto position = bullet_it->calculate_position(time);

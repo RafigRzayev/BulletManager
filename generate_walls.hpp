@@ -3,4 +3,4 @@
 #include "wall.hpp"
 #include <vector>
 
-std::vector<Wall> generate_Walls(size_t N);
+std::vector<Wall> generate_walls(size_t N);
