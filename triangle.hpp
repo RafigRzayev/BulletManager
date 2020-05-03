@@ -21,7 +21,7 @@ struct Triangle {
     float sub_tr_3_area = calculate_area(x2_, y2_, x, y, x1_, y1_);
     // P is inside the triangle if sum of 3 areas is equal to triangle area
     float diff = abs(tr_area - (sub_tr_1_area + sub_tr_2_area + sub_tr_3_area));
-    return diff < 0.000001; // Use this instead of "diff == 0" because of float precision errors
+    return diff < 0.001; // Use this instead of "diff == 0" because of float precision errors
   }
 
   // calculates area of a triangle

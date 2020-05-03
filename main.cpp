@@ -6,8 +6,8 @@
 
 int main(int argc, char **args) {
   Window &window = Window::getInstance();
-  const size_t WALL_COUNT_{40};
-  std::vector<Wall> walls = generate_walls(WALL_COUNT_);
+  const size_t WALL_COUNT_{30};
+  auto walls = generate_walls(WALL_COUNT_);
   Gun gun(&walls);
   SDL_Event e;
   bool quit{false};

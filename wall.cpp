@@ -5,7 +5,9 @@
 Image Wall::wall_image_{"wall.bmp"};
 
 // Default Constructor
-Wall::Wall() { std::cout << "Wall Default Constructor\n"; }
+Wall::Wall() { 
+  std::cout << "Wall Default Constructor\n"; 
+}
 
 // User-Defined Constructor
 Wall::Wall(int x, int y) : x_{x}, y_{y} {
@@ -28,7 +30,9 @@ Wall &Wall::operator=(const Wall &rhs) {
 }
 
 // Destructor
-Wall::~Wall() { std::cout << "Wall Destructor\n"; }
+Wall::~Wall() {
+  std::cout << "Wall Destructor\n"; 
+}
 
 // Render the wall
 void Wall::draw() const { wall_image_.draw(x_, y_); }

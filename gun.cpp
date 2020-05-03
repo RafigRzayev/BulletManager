@@ -49,7 +49,7 @@ void Gun::handle_mouse_input(SDL_Event &e) {
   if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT) {
     int x, y;
     SDL_GetMouseState(&x, &y);
-    manager_.Fire(gun_x_, gun_y_, x, y, 100, current_duration(), 15);
+    manager_.Fire(gun_x_, gun_y_, x, y, 150, current_duration(), 15);
   }
 }
 
