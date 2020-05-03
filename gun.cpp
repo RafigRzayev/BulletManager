@@ -59,8 +59,7 @@ void Gun::update_all() {
   Update();
 }
 
-// Updates gun location according to vertical & horizontal speed. 
-// Then renders it at new location
+// Updates gun location according to vertical & horizontal speed. Then renders it at new location
 void Gun::Update() {
   static Window &window = Window::getInstance();
   gun_x_ += gun_speed_x_;
@@ -85,5 +84,5 @@ float Gun::current_duration() {
   return duration;
 }
 
-// Render gun on its current coordinaetes
+// Render gun on its current coordinates
 void Gun::draw() { gun_image_.draw(gun_x_, gun_y_); }
