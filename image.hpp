@@ -3,11 +3,11 @@
 #include "SDL\include\SDL2\SDL.h"
 #include <string>
 
-/* Image class is used to store textures for renderding. 
-*/
+/* Image class stores renderable texture and its dimensions. It uses SDL2 library. 
+  Public methods provide interface for drawing texture on the window, and getting texture dimensions.*/
 class Image {
 public:
-  Image(std::string s);
+  Image(const std::string& s);
   ~Image();
   void draw(float x, float y);
   int get_width();
