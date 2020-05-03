@@ -3,6 +3,8 @@
 #include "bulletmanager.hpp"
 #include "image.hpp"
 #include <chrono>
+#include "wall.hpp"
+#include "vector"
 
 /* Gun class represents a gun which fires bullets.
 
@@ -35,7 +37,7 @@ update_all() - combines gun & bulletmanager updates for simple public interface
 
 class Gun {
 public:
-  Gun();
+  Gun(std::vector<Wall>* walls);
   ~Gun();
   void handle_user_input(SDL_Event &);
   void update_all();
@@ -52,7 +54,7 @@ private:
   float gun_speed_x_{0};
   float gun_speed_y_{0};
   constexpr static const float base_speed_{0.2}; // Adjust for gun movement sensitivity
-  BulletManager manager_{};
+  BulletManager manager_;
   std::chrono::time_point<std::chrono::system_clock> start_time_;
   static Image gun_image_;
 };

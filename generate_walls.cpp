@@ -18,8 +18,8 @@ std::vector<Wall> generate_walls(size_t N) {
   // Define borders for wall generation (top 3/4 of screen)
   const int LEFT_LIMIT = WALL_WIDTH / 2.0;
   const int RIGHT_LIMIT = SCREEN_WIDTH - (WALL_WIDTH / 2.0);
-  const int TOP_LIMIT = WALL_HEIGHT / 2;
-  const int BOT_LIMIT = (SCREEN_HEIGHT * (3.0 / 4.0)) - (WALL_HEIGHT / 2);
+  const int TOP_LIMIT = WALL_HEIGHT / 2.0 ;
+  const int BOT_LIMIT = (SCREEN_HEIGHT * (3.0 / 4.0)) - (WALL_HEIGHT / 2.0);
 
   // Settings to generate random [x,y] coordinates for the walls
   std::default_random_engine rng{static_cast<long unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count())};

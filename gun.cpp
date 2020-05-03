@@ -4,24 +4,25 @@
 
 Image Gun::gun_image_{"ufo.bmp"};
 
-// Constructor - place gun in the bottom of window, calculate game start time
-Gun::Gun() {
+// Constructor
+Gun::Gun(std::vector<Wall>* walls) : manager_{walls} { // link wall to be attacked with the bullet manager
   std::cout << "Gun Constructor\n";
   static Window &window = Window::getInstance();
+  // Place gun in the bottom of window
   gun_x_ = window.get_width() / 2.0;
   gun_y_ = window.get_height() - gun_image_.get_height();
+  // calculate game start time. 
   start_time_ = std::chrono::system_clock::now();
 }
 
 // Destructor
 Gun::~Gun() { std::cout << "Gun Destructor\n"; } 
 
-// Adjust gun speed & fire bullets according to user input
+// Adjust gun speed and fire bullets according to user input
 void Gun::handle_user_input(SDL_Event &e) {
   handle_keyboard_input();
   handle_mouse_input(e);
 }
-
 
 void Gun::handle_keyboard_input() {
   // Set vertical movement speed if "W" or "S" keys were pressed
@@ -48,7 +49,7 @@ void Gun::handle_mouse_input(SDL_Event &e) {
   if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT) {
     int x, y;
     SDL_GetMouseState(&x, &y);
-    manager_.Fire(gun_x_, gun_y_, x, y, 100, current_duration(), 5);
+    manager_.Fire(gun_x_, gun_y_, x, y, 100, current_duration(), 15);
   }
 }
 
@@ -65,13 +66,13 @@ void Gun::Update() {
   gun_x_ += gun_speed_x_;
   gun_y_ += gun_speed_y_;
   // Limit horizontal movement by window borders
-  if (gun_x_ - gun_image_.get_width() / 2 < 0 ||
-      gun_x_ + gun_image_.get_width() / 2 > window.get_width()) {
+  if (gun_x_ - gun_image_.get_width() / 2.0 < 0 ||
+      gun_x_ + gun_image_.get_width() / 2.0 > window.get_width()) {
     gun_x_ -= gun_speed_x_;
   }
   // Limit vertical movement for bottom 25% of screen height
-  if (gun_y_ - gun_image_.get_height() / 2 < window.get_height() * 3.0 / 4 ||
-      gun_y_ + gun_image_.get_height() / 2 > window.get_height()) {
+  if (gun_y_ - gun_image_.get_height() / 2.0 < window.get_height() * 3.0 / 4.0 ||
+      gun_y_ + gun_image_.get_height() / 2.0 > window.get_height()) {
     gun_y_ -= gun_speed_y_;
   }
   draw();

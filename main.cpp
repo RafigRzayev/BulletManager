@@ -1,9 +1,14 @@
 #include "gun.hpp"
 #include "window.hpp"
+#include "wall.hpp"
+#include "generate_walls.hpp"
+#include "vector"
 
 int main(int argc, char **args) {
   Window &window = Window::getInstance();
-  Gun gun;
+  const size_t WALL_COUNT_{40};
+  std::vector<Wall> walls = generate_walls(WALL_COUNT_);
+  Gun gun(&walls);
   SDL_Event e;
   bool quit{false};
   while (!quit) {
@@ -14,6 +19,7 @@ int main(int argc, char **args) {
     }
     window.clear();
     gun.update_all();
+    for(const auto& wall : walls) { wall.draw(); }
     window.display();
   }
   return 0;
