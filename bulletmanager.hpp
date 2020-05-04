@@ -3,8 +3,6 @@
 #include "bullet.hpp"
 #include "wall.hpp"
 #include <list>
-#include <vector>
-
 
 class BulletManager {
 public:
@@ -21,6 +19,6 @@ public:
             float time, float life_time);
 
 private:
-  std::vector<Bullet> bullets_; // Fired bullets will be added to this vector
+  std::list<Bullet> bullets_; // Fired bullets will be added to this list
   std::list<Wall>* walls_; // link to walls under attack, we are not responsible for their memory.
 };
