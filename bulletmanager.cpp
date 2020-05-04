@@ -2,7 +2,7 @@
 #include <iostream>
 
 // User-Defined Constructor
-BulletManager::BulletManager(std::vector<Wall> *walls) : walls_{walls} {
+BulletManager::BulletManager(std::list<Wall> *walls) : walls_{walls} {
   std::cout << "BulletManager Default Constructor\n";
 }
 

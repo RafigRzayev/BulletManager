@@ -5,7 +5,7 @@
 Image Gun::gun_image_{"ufo.bmp"};
 
 // Constructor
-Gun::Gun(std::vector<Wall>* walls) : manager_{walls} { // link wall to be attacked with the bullet manager
+Gun::Gun(std::list<Wall>* walls) : manager_{walls} { // links bullet manager to the relevant walls
   std::cout << "Gun Constructor\n";
   static Window &window = Window::getInstance();
   // Place gun in the bottom of window

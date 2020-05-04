@@ -2,12 +2,13 @@
 
 #include "bullet.hpp"
 #include "wall.hpp"
+#include <list>
 #include <vector>
 
 
 class BulletManager {
 public:
-  BulletManager(std::vector<Wall>*);
+  BulletManager(std::list<Wall>*);
   BulletManager(const BulletManager &);
   BulletManager(BulletManager &&);
   BulletManager &operator=(const BulletManager &);
@@ -21,5 +22,5 @@ public:
 
 private:
   std::vector<Bullet> bullets_; // Fired bullets will be added to this vector
-  std::vector<Wall>* walls_; // link to walls under attack, we are not responsible for their memory.
+  std::list<Wall>* walls_; // link to walls under attack, we are not responsible for their memory.
 };

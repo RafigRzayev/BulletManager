@@ -4,9 +4,8 @@
 #include <random>
 
 // Generate N random walls which don't overlap
-std::vector<Wall> generate_walls(size_t N) {
-  std::vector<Wall> walls;
-  walls.reserve(N);
+std::list<Wall> generate_walls(size_t N) {
+  std::list<Wall> walls;
 
   // Define screen and wall dimensions
   Window &window = Window::getInstance();
@@ -26,21 +25,23 @@ std::vector<Wall> generate_walls(size_t N) {
   std::uniform_int_distribution<int> distr_x(LEFT_LIMIT, RIGHT_LIMIT);
   std::uniform_int_distribution<int> distr_y(TOP_LIMIT, BOT_LIMIT);
 
-
   for (size_t i{0}; i < N; ++i) {
     // Generate random coordinates for current wall
     int x = distr_x(rng);
     int y = distr_y(rng);
     // Compare for coincidence with previous walls
-    for (size_t j{0}; j < i; ++j) {
-      if (walls.at(j).coincidies(x, y)) {
+    auto prev_wall_it = walls.begin();
+    while (prev_wall_it != walls.end()) {
+      if (prev_wall_it->coincidies(x, y)) {
         // if there is coincidence, generate new coordinates and reset comparison loop
         x = distr_x(rng);
         y = distr_y(rng);
-        j = -1;
+        prev_wall_it = walls.begin();
+      } else {
+        ++prev_wall_it;
       }
     }
-    // Add generated wall to the vector
+    // Add generated wall to the list
     walls.emplace_back(x, y);
   }
   return walls;

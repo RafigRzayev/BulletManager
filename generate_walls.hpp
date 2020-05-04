@@ -1,7 +1,7 @@
 #pragma once
 
 #include "wall.hpp"
-#include <vector>
+#include <list>
 
 // Generate N random walls which don't overlap
-std::vector<Wall> generate_walls(size_t N);
+std::list<Wall> generate_walls(size_t N);

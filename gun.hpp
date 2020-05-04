@@ -4,7 +4,7 @@
 #include "image.hpp"
 #include <chrono>
 #include "wall.hpp"
-#include "vector"
+#include <list>
 
 /* Gun class represents a gun which fires bullets.
 
@@ -37,7 +37,7 @@ update_all() - combines gun & bulletmanager updates for simple public interface
 
 class Gun {
 public:
-  Gun(std::vector<Wall>* walls);
+  Gun(std::list<Wall>* walls);
   ~Gun();
   void handle_user_input(SDL_Event &);
   void update_all();
