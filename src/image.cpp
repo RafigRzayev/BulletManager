@@ -8,7 +8,8 @@ Image::Image(const std::string &s) {
   /*In SDL library, images are loaded into SDL_Surface objects. But SDL_Surface only supports CPU rendering.
   For better performance, we need GPU rendering. So, what we do is: load SDL_Surface, transform it to SDL_Texture, 
   store the texture, and then destroy the surface*/
-  std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)> temp_surface(SDL_LoadBMP(s.c_str()), &SDL_FreeSurface);
+  static std::string path = "..\\media\\";
+  std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)> temp_surface(SDL_LoadBMP((path+s).c_str()), &SDL_FreeSurface);
   auto surface_ptr = temp_surface.get();
   if(surface_ptr == nullptr) {
     std::cout << "Unable to load " << s << std::endl;
