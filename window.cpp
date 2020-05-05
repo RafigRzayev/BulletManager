@@ -47,12 +47,12 @@ void Window::clear() {
 void Window::display() { SDL_RenderPresent(renderer_); }
 
 // Check if user pressed window close button
-bool Window::check_quit(SDL_Event &e) const { return e.type == SDL_QUIT; }
+bool Window::check_quit(SDL_Event &e) const noexcept { return e.type == SDL_QUIT; }
 
 // Provide renderer so that external users can draw on the window
-SDL_Renderer *Window::get_renderer() { return renderer_; }
+SDL_Renderer *Window::get_renderer() noexcept { return renderer_; }
 
-size_t Window::get_width() const { return W_WIDTH_; }
+size_t Window::get_width() const noexcept { return W_WIDTH_; }
 
-size_t Window::get_height() const { return W_HEIGHT_; }
+size_t Window::get_height() const noexcept { return W_HEIGHT_; }
 

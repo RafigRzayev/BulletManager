@@ -38,7 +38,7 @@ Wall::~Wall() {
 void Wall::draw() const { wall_image_.draw(x_, y_); }
 
 // Check if a wall with center [x,y] would overlap with current wall
-bool Wall::coincidies(int x, int y) const {
+bool Wall::coincidies(int x, int y) const noexcept{
   return (x >= x_ - wall_image_.get_width()) &&
          (x <= x_ + wall_image_.get_width()) &&
          (y >= y_ - wall_image_.get_height()) &&
@@ -46,7 +46,7 @@ bool Wall::coincidies(int x, int y) const {
 }
 
 // Check if point[x,y] is inside the wall and report collision effect
-int Wall::collision_status(float x, float y) const {
+int Wall::collision_status(float x, float y) const noexcept {
   // Define borders of the wall
   float LEFT_BORDER_X = x_ - (wall_image_.get_width() / 2.0);
   float RIGHT_BORDER_X = x_ + (wall_image_.get_width() / 2.0);
@@ -74,6 +74,6 @@ int Wall::collision_status(float x, float y) const {
   }
 }
 
-int Wall::get_width() { return wall_image_.get_width(); }
+int Wall::get_width() noexcept { return wall_image_.get_width(); }
 
-int Wall::get_height() { return wall_image_.get_height(); }
+int Wall::get_height() noexcept{ return wall_image_.get_height(); }

@@ -12,7 +12,7 @@ struct Triangle {
   float y3_;
 
   // checks if point P[x ,y] is inside the triangle
-  bool covers(float x, float y) {
+  bool covers(float x, float y) const noexcept {
     // Area of current triangle
     float tr_area = calculate_area(x1_, y1_, x2_, y2_, x3_, y3_);
     // Generate 3 triangles by using P and 2 triangle vertices. 
@@ -25,7 +25,7 @@ struct Triangle {
   }
 
   // calculates area of a triangle
-  static float calculate_area(float x1, float y1, float x2, float y2, float x3, float y3) {
+  static float calculate_area(float x1, float y1, float x2, float y2, float x3, float y3) noexcept{
     return abs(0.5 * (x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)));
   }
 };

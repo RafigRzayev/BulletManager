@@ -20,10 +20,10 @@ public:
   ~Window();
   void clear();
   void display();
-  bool check_quit(SDL_Event &e) const;
-  SDL_Renderer *get_renderer();
-  size_t get_width() const;
-  size_t get_height() const;
+  bool check_quit(SDL_Event &e) const noexcept;
+  SDL_Renderer *get_renderer() noexcept;
+  size_t get_width() const noexcept;
+  size_t get_height() const noexcept;
   
 
   // Disable copy / move semantics for singleton design

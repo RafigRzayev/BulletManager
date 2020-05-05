@@ -29,10 +29,10 @@ public:
   Wall &operator=(const Wall &);
   ~Wall();
   void draw() const;
-  bool coincidies(int x, int y) const;
-  int collision_status(float x, float y) const;
-  static int get_width();
-  static int get_height();
+  bool coincidies(int x, int y) const noexcept;
+  int collision_status(float x, float y) const noexcept;
+  static int get_width() noexcept;
+  static int get_height() noexcept;
 
 private:
   int x_{0};
