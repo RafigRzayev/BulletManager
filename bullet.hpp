@@ -55,13 +55,13 @@ public:
   Bullet(const Bullet &rhs);
   Bullet &operator=(const Bullet &rhs);
   ~Bullet();
-  Bullet_Position calculate_position(float t);
-  void draw(float x, float y);
-  void reflect_horizontally(float t, float x, float y);
-  void reflect_vertically(float t, float x, float y);
+  Bullet_Position calculate_position(float t) const noexcept;
+  void draw(float x, float y) const;
+  void reflect_horizontally(float t, float x, float y) noexcept;
+  void reflect_vertically(float t, float x, float y) noexcept;
 
 private:
-  void calculate_x_and_y_speed(float dst_x, float dst_y, float speed);
+  void assign_x_and_y_speed(float dst_x, float dst_y, float speed) noexcept;
 
   float src_x_{0};
   float src_y_{0};

@@ -11,7 +11,7 @@ Bullet::Bullet() { std::cout << "Bullet Default Constructor\n"; }
 Bullet::Bullet(float src_x, float src_y, float dst_x, float dst_y, float speed, float time, float life_time)
     : src_x_{src_x}, src_y_{src_y}, time_{time}, life_time_{life_time} {
   std::cout << "Bullet User-Defined Constructor\n";
-  calculate_x_and_y_speed(dst_x, dst_y, speed);
+  assign_x_and_y_speed(dst_x, dst_y, speed);
 }
 
 // Copy Constructor
@@ -39,7 +39,7 @@ Bullet &Bullet::operator=(const Bullet &rhs) {
 Bullet::~Bullet() { std::cout << "Bullet Destructor\n"; }
 
 // Calculate bullet position at time t
-Bullet_Position Bullet::calculate_position(float current_time) {
+Bullet_Position Bullet::calculate_position(float current_time) const noexcept {
   if (current_time < time_) {
     return Bullet_Position{0, 0, BULLET_NOT_YET_FLYING};
   } else if (current_time > time_ + life_time_) {
@@ -53,11 +53,11 @@ Bullet_Position Bullet::calculate_position(float current_time) {
 }
 
 // Render bullet_image_ at given position
-void Bullet::draw(float x, float y) { bullet_image_.draw(x, y); }
+void Bullet::draw(float x, float y) const { bullet_image_.draw(x, y); }
 
 // Reverse the speed component. Also update other member variables. 
 // Otherwise calculate_position would not work correctly after reflection.
-void Bullet::reflect_horizontally(float t, float x, float y) {
+void Bullet::reflect_horizontally(float t, float x, float y) noexcept {
   src_x_ = x;
   src_y_ = y;
   life_time_ -= (t - time_);
@@ -67,7 +67,7 @@ void Bullet::reflect_horizontally(float t, float x, float y) {
 
 // Reverse the speed component. Also update other member variables. 
 // Otherwise calculate_position would not work correctly after reflection.
-void Bullet::reflect_vertically(float t, float x, float y) {
+void Bullet::reflect_vertically(float t, float x, float y) noexcept {
   src_x_ = x;
   src_y_ = y;
   life_time_ -= (t - time_);
@@ -76,11 +76,15 @@ void Bullet::reflect_vertically(float t, float x, float y) {
 }
 
 // Calculate horizontal and vertical speed components based on speed & destination / source coordinates
-void Bullet::calculate_x_and_y_speed(float dst_x, float dst_y, float speed) {
+void Bullet::assign_x_and_y_speed(float dst_x, float dst_y, float speed) noexcept {
   // Build a triangle from src and dst
   const float X_LENGTH = abs(dst_x - src_x_);
   const float Y_LENGTH = abs(dst_y - src_y_);
   const float HYPOTENUSE = sqrt(X_LENGTH * X_LENGTH + Y_LENGTH * Y_LENGTH);
+  if(HYPOTENUSE == 0) {
+    speed_x_ = speed_y_ = 0;
+    return;
+  }
   // Calculate angle
   const float cos_alpha = X_LENGTH / HYPOTENUSE;
   const float sin_alpha = Y_LENGTH / HYPOTENUSE;

@@ -5,7 +5,7 @@
 
 int main(int argc, char **args) {
   Window &window = Window::getInstance();
-  const size_t WALL_COUNT_{30};
+  const size_t WALL_COUNT_{40};
   auto walls = generate_walls(WALL_COUNT_);
   Gun gun(&walls);
   SDL_Event e;

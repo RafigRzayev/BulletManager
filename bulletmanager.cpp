@@ -54,6 +54,10 @@ BulletManager::~BulletManager() {
           - If it collides, destroy the wall and reflect the bullet
       2) Render the bullet at calculated coordinates */
 void BulletManager::Update(float time) {
+  if(walls_ == nullptr) {
+    std::cout << "Walls linked to bulletmanger are nullptr\n";
+    throw;
+  }
   auto bullet_it = bullets_.begin();
   while (bullet_it != bullets_.end()) {
     auto position = bullet_it->calculate_position(time);

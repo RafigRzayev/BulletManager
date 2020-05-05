@@ -2,6 +2,7 @@
 #include "window.hpp"
 #include <chrono>
 #include <random>
+#include <iostream>
 
 // Generate N random walls which don't overlap
 std::list<Wall> generate_walls(size_t N) {
@@ -25,6 +26,8 @@ std::list<Wall> generate_walls(size_t N) {
   std::uniform_int_distribution<int> distr_x(LEFT_LIMIT, RIGHT_LIMIT);
   std::uniform_int_distribution<int> distr_y(TOP_LIMIT, BOT_LIMIT);
 
+  auto start_time_ = std::chrono::system_clock::now();
+  int TIMEOUT{3};
   for (size_t i{0}; i < N; ++i) {
     // Generate random coordinates for current wall
     int x = distr_x(rng);
@@ -37,6 +40,10 @@ std::list<Wall> generate_walls(size_t N) {
         x = distr_x(rng);
         y = distr_y(rng);
         prev_wall_it = walls.begin();
+        if(std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - start_time_).count() > TIMEOUT) {
+          std::cout << "Timeout in random wall generation. Requested walls don't fit to the screen\n";
+          throw;
+        }
       } else {
         ++prev_wall_it;
       }

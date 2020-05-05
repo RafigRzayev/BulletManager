@@ -27,6 +27,10 @@ void Gun::handle_user_input(SDL_Event &e) {
 void Gun::handle_keyboard_input() {
   // Set vertical movement speed if "W" or "S" keys were pressed
   const unsigned char *keyboard = SDL_GetKeyboardState(NULL);
+  if(keyboard == nullptr) {
+    std::cout << "SDL_GetKeyboardState error\n";
+    throw;
+  }
   if (keyboard[SDL_SCANCODE_W] && !keyboard[SDL_SCANCODE_S]) {
     gun_speed_y_ = -base_speed_;
   } else if (keyboard[SDL_SCANCODE_S] && !keyboard[SDL_SCANCODE_W]) {
