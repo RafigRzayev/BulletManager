@@ -1,2 +1,2 @@
 # BulletManager
-Bullet Manager Task (4A Games)
+Bullet Manager Task
