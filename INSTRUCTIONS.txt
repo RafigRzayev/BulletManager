@@ -1,0 +1,5 @@
+1) Download the repository
+2) Unzip the folder
+3) Go to the bin folder
+4) Run the application "bulletmanager.exe"
+5) Press W/S/A/D to move the gun, and left mouse click to shoot the bullets.
